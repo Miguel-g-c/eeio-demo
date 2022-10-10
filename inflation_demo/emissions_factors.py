@@ -1,31 +1,19 @@
-# Let's say that we have a simple economy with only three sectors:
-# agriculture, industry, and services.
-# We will assume that the economy is closed,
-# so that all the interactions happen in the same country.
-# We can represent the input output economy as a matrix like this one:
+# So right now our EEIO model will look like this:
 #
 #               agriculture  industry  services
 # agriculture       1.0        0.5       0.1
 # industry          0.2        1.0       0.2
 # services          0.0        0.1       1.0
 #
-# The rows represent the sectors that produce the goods and services,
-# and the columns represent the sectors that consume them.
+# CO2               0.1        0.2      0.05
+# CH4               0.2        0.1      0.01
 
 import numpy as np
 from inflation_demo.calc import inv, scale_diagonal_to_unit
+from inflation_demo.model import IO_MATRIX, INTERVENTION_MATRIX
 
-io_matrix = np.array(
-    [
-        [1.0, 0.5, 0.1],
-        [0.2, 1.0, 0.2],
-        [0.0, 0.1, 1.0],
-    ]
-)
-
-# This matrix represents the direct requirements of sector i to produce one euro of sector j.
-# This way, for producing 1 euro of agriculture,
-# we need 0.5 euros of industry and 0.1 euros of services.
+# This matrices represent the direct requirements of sector or emissions i
+# to produce one euro of sector j.
 #
 # How can we know not only the direct requirements, but also the upstream requirements?
 # We can use the Leontief inverse to compute the upstream requirements.
@@ -36,7 +24,7 @@ io_matrix = np.array(
 # We can compute the Leontief inverse using the inv function from the calc module
 # and rescale the columns to 1 euro to better understand the results:
 
-leontief_inverse = inv(io_matrix)
+leontief_inverse = inv(IO_MATRIX)
 scaled_leontief_inverse = scale_diagonal_to_unit(leontief_inverse)
 
 # The result looks like this:
@@ -51,34 +39,10 @@ scaled_leontief_inverse = scale_diagonal_to_unit(leontief_inverse)
 # considering the whole value chain, we need an input of 0.0204 euros from services
 # and an output of 0.204 euros to industry.
 
-# So this is our economic IO model which we can extend to include environmental emissions.
-# For that we need another matrix, the intervention matrix or satellite accounts.
-# In our example, we assume that we only have two types of emissions, CO2 and CH4.
-# Then the EEIO model will look like this:
-#
-#               agriculture  industry  services
-# agriculture       1.0        0.5       0.1
-# industry          0.2        1.0       0.2
-# services          0.0        0.1       1.0
-#
-# CO2               0.1        0.2      0.05
-# CH4               0.2        0.1      0.01
-#
-# The botton matrix represents the direct emissions (+) or resources (-)
-# of flow i to produce 1 euro of sector j. So our agriculture sector
-# emits 0.1 kg CO2 and 0.2 kg CH4 to produce 1 euro.
-
-intervention_matrix = np.array(
-    [
-        [0.1, 0.2, 0.05],
-        [0.2, 0.1, 0.01],
-    ]
-)
-
 # How can we get the upstream emissions? Easy, we can get the Leontief inverse matrix
 # and multiply it by the intervention matrix. What we get is the intensity matrix:
 
-intensity_matrix = np.matmul(leontief_inverse, intervention_matrix.transpose())
+intensity_matrix = np.matmul(leontief_inverse, INTERVENTION_MATRIX.transpose())
 
 # The result looks like this:
 #
@@ -113,7 +77,7 @@ supply_vector = np.matmul(demand_vector, leontief_inverse)
 # So we can get the emissions of our new activity, aka life cycle inventory, by multiplying
 # the supply vector by the intervention matrix:
 
-lci = np.matmul(supply_vector, intervention_matrix.transpose())
+lci = np.matmul(supply_vector, INTERVENTION_MATRIX.transpose())
 
 # The result is:
 #
