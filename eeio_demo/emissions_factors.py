@@ -9,8 +9,8 @@
 # CH4               0.2        0.1      0.01
 
 import numpy as np
-from inflation_demo.calc import inv, scale_diagonal_to_unit
-from inflation_demo.model import IO_MATRIX, INTERVENTION_MATRIX
+from eeio_demo.calc import inv, scale_diagonal_to_unit
+from eeio_demo.model import IO_MATRIX, INTERVENTION_MATRIX
 
 # This matrices represent the direct requirements of sector or emissions i
 # to produce one euro of sector j.

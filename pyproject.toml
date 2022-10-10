@@ -1,5 +1,5 @@
 [tool.poetry]
-name = "inflation-demo"
+name = "eeio-demo"
 version = "0.1.0"
 description = ""
 authors = ["Miguel Garcia Casas <miguel.g.c.505@gmail.com>"]
