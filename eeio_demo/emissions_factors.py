@@ -113,3 +113,5 @@ ef_model = np.matmul(intensity_matrix, cf)
 #
 #               agriculture      industry      services
 # ef               5.08           2.21           0.13
+
+# Congratulations! You have solved a LCA model!!
