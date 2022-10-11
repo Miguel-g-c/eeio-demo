@@ -14,7 +14,7 @@ The simple EEIO model for running examples.
 
 ## Scripts
 
-### emisions_factors
+### emision_factors
 
 A script that shows how to solve an EEIO model, get the emission factors,
 and use the model as background system to model a new activity.
