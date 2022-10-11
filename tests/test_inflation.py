@@ -26,15 +26,15 @@ def test_that_applying_inflation_rate_directly_to_emissions_factors_doesnt_matte
     cf = np.array([1.0, 30.5])
 
     leontief_inverse = inv(IO_MATRIX)
-    intensity_matrix = np.matmul(leontief_inverse, INTERVENTION_MATRIX.transpose())
-    emissions_factors = np.matmul(intensity_matrix, cf)
+    intensity_matrix = leontief_inverse @ INTERVENTION_MATRIX.transpose()
+    emissions_factors = intensity_matrix @ cf
 
     updated_model = IO_MATRIX * [1.15, 1.2, 1.1]
     updated_leontief_inverse = inv(updated_model)
-    updated_intensity_matrix = np.matmul(
-        updated_leontief_inverse, INTERVENTION_MATRIX.transpose()
+    updated_intensity_matrix = (
+        updated_leontief_inverse @ INTERVENTION_MATRIX.transpose()
     )
-    updated_emissions_factors = np.matmul(updated_intensity_matrix, cf)
+    updated_emissions_factors = updated_intensity_matrix @ cf
 
     directly_updated_emissions_factors = emissions_factors * np.array(
         [

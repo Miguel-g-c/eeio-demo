@@ -42,7 +42,7 @@ scaled_leontief_inverse = scale_diagonal_to_unit(leontief_inverse)
 # How can we get the upstream emissions? Easy, we can get the Leontief inverse matrix
 # and multiply it by the intervention matrix. What we get is the intensity matrix:
 
-intensity_matrix = np.matmul(leontief_inverse, INTERVENTION_MATRIX.transpose())
+intensity_matrix = leontief_inverse @ INTERVENTION_MATRIX.transpose()
 
 # The result looks like this:
 #
@@ -64,7 +64,7 @@ demand_vector = np.array([0.1, 0.2, 0.3])
 # Therefore we can calculate our supply vector by multiplying the demand vector
 # by the Leontief inverse matrix:
 
-supply_vector = np.matmul(demand_vector, leontief_inverse)
+supply_vector = demand_vector @ leontief_inverse
 
 # The result is:
 #
@@ -77,7 +77,7 @@ supply_vector = np.matmul(demand_vector, leontief_inverse)
 # So we can get the emissions of our new activity, aka life cycle inventory, by multiplying
 # the supply vector by the intervention matrix:
 
-lci = np.matmul(supply_vector, INTERVENTION_MATRIX.transpose())
+lci = supply_vector @ INTERVENTION_MATRIX.transpose()
 
 # The result is:
 #
@@ -100,14 +100,14 @@ cf = np.array([1.0, 30.5])
 # So the emission factor for our new activity is computed by multiplying the lci vector
 # by the characterization factors:
 
-ef = np.matmul(lci, cf)
+ef = lci @ cf
 
 # The result is 0.98 kg CO2 eq per euro.
 #
 # And we can also calculate the emission factors of our economy model by multiplying
 # the intensity matrix by the characterization factors:
 
-ef_model = np.matmul(intensity_matrix, cf)
+ef_model = intensity_matrix @ cf
 
 # The result is:
 #

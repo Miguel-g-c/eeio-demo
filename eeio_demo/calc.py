@@ -28,7 +28,7 @@ def scale_diagonal_to_unit(matrix: npt.ArrayLike) -> np.ndarray:
         np.ndarray: Scaled matrix
     """
     matrix_in = np.array(matrix)
-    scaled_matrix = np.copy(matrix)
+    scaled_matrix = matrix_in.copy()
 
     for i in range(scaled_matrix.shape[0]):
         scaled_matrix[:, i] /= matrix_in[i, i]
